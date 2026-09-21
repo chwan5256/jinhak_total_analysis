@@ -96,6 +96,22 @@ jobs:
           [ "$ok" = "1" ] || exit 1
           echo "④ 데이터 파일 통과"
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: 학과 데이터 검증 · 시드 동기화 확인
+        run: |
+          test -f data/majors.json || { echo "data/majors.json 이 없습니다."; exit 1; }
+          python scripts/build_majors.py --check
+          python scripts/build_majors.py > /dev/null
+          if ! git diff --quiet -- index.html; then
+            echo "index.html 의 학과 시드가 data/majors.json 과 다릅니다."
+            echo "로컬에서 'python scripts/build_majors.py' 를 실행한 뒤 다시 커밋하십시오."
+            exit 1
+          fi
+          echo "⑤ 학과 데이터 통과"
+
   deploy:
     needs: verify
     runs-on: ubuntu-latest

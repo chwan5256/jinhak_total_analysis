@@ -82,8 +82,17 @@ UI        dialog · progress · handlePdf · runOcr · move/cycle/undo · init
 ```
 
 전공을 추가하려면 `MAJORS`에 항목 하나를 넣으면 셀렉트 박스·점검표·면접 질문이 자동으로 따라옵니다.
-항목의 `group` 값은 `MAJOR_GROUPS`(공학 / 자연과학 / 의약·보건 / 사회과학 / 인문·어문 / 사범·교육) 중 하나여야 셀렉트의 계열 묶음에 들어갑니다.
-현재 6개 계열 43개 학과군이 등록되어 있습니다.
+다만 **학과 표준은 `index.html` 이 아니라 `data/majors.json` 에 있습니다.** 현재 6개 계열 42개 학과군입니다.
+
+```
+data/majors.json          학과 표준 원본 — 여기만 고칩니다
+scripts/build_majors.py   검증 + index.html 시드 재생성
+index.html                MAJORS_SEED(계열 대표 6개) — 자동 생성 구역, 손대지 않습니다
+```
+
+학과를 추가하려면 `rows` 에 항목 하나를 넣고 `python scripts/build_majors.py` 를 실행한 뒤, `data/majors.json` 과 `index.html` 을 함께 커밋합니다. `group` 값은 `groups` 배열(공학 / 자연과학 / 의약·보건 / 사회과학 / 인문·어문 / 사범·교육) 중 하나여야 계열 묶음에 들어갑니다.
+
+`file://` 로 직접 열면 브라우저가 CORS로 JSON을 막습니다. 그때는 계열 대표 6개 축약본으로 동작하며, 화면 상단에 그 사실이 표시됩니다. 전체 학과군을 보려면 배포된 주소로 접속하십시오.
 분류 규칙을 조정하려면 `RULES`의 가중치(3.0 결정적 / 1.8 강함 / 1.0 보통)만 손보면 됩니다.
 
 ## 외부 의존성
